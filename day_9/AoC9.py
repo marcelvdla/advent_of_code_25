@@ -133,7 +133,6 @@ def square_crosses_boundary(corners, tiles):
     return False
 
 
-
 def largest_red_square_contained(file):
     tiles = get_red_tiles(file)
     areas = compute_areas(tiles)
@@ -163,6 +162,38 @@ def largest_red_square_contained(file):
             break
         print(f"checking for square {corners} with size {int(np.max(areas))}")#, end ="\r", flush=True)
         print_grid(tiles, corners)
+    
+    return int(np.max(areas))
+
+
+def square_contains_edge(corners, tiles):
+    lines_x = [corners[0][0], corners[1][0]]
+    lines_y = [corners[0][1], corners[1][1]]
+
+    print(lines_x, lines_y)
+    
+
+
+def largest_red_square_contained_v2(file):
+    tiles = get_red_tiles(file)
+    areas = compute_areas(tiles)
+    highest = np.argmax(areas)
+
+    corner_index = [highest // len(tiles), highest % len(tiles)]
+    corners = np.array([tiles[corner_index[0]], tiles[corner_index[1]]])
+    i = 1
+    print(f"checking for square {corners} with size {int(np.max(areas))}")#, end ="\r", flush=True)
+    print_grid(tiles, corners)
+
+    while (square_contains_edge(corners, tiles)):
+        areas[corner_index[0], corner_index[1]] = 0
+        areas[corner_index[1], corner_index[0]] = 0
+        highest = np.argmax(areas)
+        corner_index = [highest // len(tiles), highest % len(tiles)]
+        corners = np.array([tiles[corner_index[0]], tiles[corner_index[1]]])
+        i += 1
+        # print_grid(tiles, corners)
+        break
     
     return int(np.max(areas))
 
@@ -200,5 +231,5 @@ if __name__ == "__main__":
     print(f"Actual file: size of the largest red square is {largest_red_square('actual_input.txt')} \n")
 
     print("The answers for the second half:")
-    print(f"Test file: size of the largest red square is {largest_red_square_contained('example_input.txt')} ")
+    print(f"Test file: size of the largest red square is {largest_red_square_contained_v2('example_input.txt')} ")
     # print(f"Actual file: size of the largest red square is {largest_red_square_contained('actual_input.txt')} ")

@@ -3,6 +3,10 @@ class button:
         self.action = action
 
 
+    def __str__(self):
+        return str(self.action)
+
+
     def press(self, state : str):
         new_state = ""
         for i in range(len(state)):
